@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Custom Marker Tooltips</title>
+  
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <script src='//api.tiles.mapbox.com/mapbox.js/v1.4.2/mapbox.js'></script>
+  <link href='//api.tiles.mapbox.com/mapbox.js/v1.4.2/mapbox.css' rel='stylesheet' />
+  
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+<div id='map'></div>
+<style>
+.popup {
+    text-align: center;
+}
+.popup img {
+    width: 100%;
+}
+</style>
+<script>
+var map = L.mapbox.map('map', 'examples.map-9ijuk24y');
+
+var geoJson = [{
+    type: 'Feature',
+    "geometry": { "type": "Point", "coordinates": [-121.1612642, 38.6923577]},
+    "properties": {
+        "image": "http://fireflygrove.com/songnotes/images/artists/JohnnyCash.jpg",
+        "artist": "Johnny Cash",
+        "song": "Folsom Prison Blues"
+    }
+}, {
+    type: 'Feature',
+    "geometry": { "type": "Point", "coordinates": [-78.6390779, 35.7804015]},
+    "properties": {
+        "image": "http://fireflygrove.com/songnotes/images/artists/OldCrowMedicineShow.jpg",
+        "artist": "Old Crow Medicine Show",
+        "song": "Wagon Wheel"
+    }
+}, {
+    type: 'Feature',
+    "geometry": { "type": "Point", "coordinates": [-80.8408415, 38.4758406]},
+    "properties": {
+        "image": "http://fireflygrove.com/songnotes/images/artists/JohnDenver.jpg",
+        "artist": "John Denver",
+        "song": "Take Me Home, Country Roads"
+    }
+}];
+
+// Add custom popups to each using our custom feature properties
+map.markerLayer.on('layeradd', function(e) {
+    var marker = e.layer,
+        feature = marker.feature;
+
+    // Create custom popup content
+    var popupContent =  '<img src="' + feature.properties.image + '">' +
+                        '   <h2>' + feature.properties.song + '</h2>' +
+                        '   <p>' + feature.properties.artist + '</p>';
+
+    // http://leafletjs.com/reference.html#popup
+    marker.bindPopup(popupContent,{
+        closeButton: false,
+        minWidth: 320
+    });
+});
+
+// Add features to the map
+map.markerLayer.setGeoJSON(geoJson);
+
+map.setView([45.908, -78.525], 4);
+</script>
+</body>
+</html>
